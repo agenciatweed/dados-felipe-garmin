@@ -6,7 +6,7 @@ import subprocess
 PROJECT=Path(__file__).resolve().parent.parent
 REPO=PROJECT/'repositorio'
 FILES=['package.json','package-lock.json','vercel.json','README.md','iniciar-dashboard.ps1','abrir-dashboard.ps1','abrir-dashboard.cmd',
- 'api/cloud.mjs','cloud/catalog.json','scripts/build.mjs',
+ 'api/cloud.mjs','cloud/catalog.json','scripts/build.mjs','tests/cloud.test.mjs',
  'dashboard/server.py','dashboard/catalog.py','dashboard/local_store.py','dashboard/collector.py','dashboard/sync_cloud.py','dashboard/run_pipeline.py','dashboard/publish_public.py','dashboard/test_collector.py','dashboard/sync-config.json','dashboard/requirements.txt','dashboard/index.html','dashboard/app.js','dashboard/style.css','dashboard/tweed.css','dashboard/assets/ORIGINS.json','dashboard/assets/tweed.svg']
 
 def git(*args,check=True):
