@@ -63,6 +63,10 @@ def config():
         raise ValueError('Configuração de coleta inválida.')
     return c
 
+def run_interval(store, cfg):
+    key = 'incremental_interval_seconds' if store.get('mode', 'history') == 'incremental' else 'history_interval_seconds'
+    return cfg.get(key, cfg.get('run_interval_seconds', 3600))
+
 def plan(store, cfg, now=None):
     now = now or local_now()
     today = str(now.date())
@@ -193,14 +197,27 @@ def run_once(store, cfg, api_factory=None, wall=time.time):
             return 'paused'
         if store.get('cooldown_until', 0) > now:
             return 'cooldown'
-        if store.get('next_run_at', 0) > now:
+        interval = run_interval(store, cfg)
+        due = store.get('next_run_at', 0)
+        previous_interval = store.get('scheduled_interval_seconds', 3600)
+        # Recalculate cadence after a configuration change without shortening
+        # the separate Garmin cooldown or a pending job's Retry-After.
+        if due and previous_interval != interval:
+            due += interval - previous_interval
+            store.set('next_run_at', due)
+            store.set('scheduled_interval_seconds', interval)
+        if due > now:
             return 'waiting'
         if store.get('auth_required', False):
             return 'auth_required'
-        store.set('next_run_at', now + cfg['run_interval_seconds'])
+        store.set('next_run_at', now + interval)
+        store.set('scheduled_interval_seconds', interval)
         store.set('state', 'running')
         store.set('heartbeat', local_now().isoformat())
         batch = plan(store, cfg)
+        interval = run_interval(store, cfg)
+        store.set('next_run_at', now + interval)
+        store.set('scheduled_interval_seconds', interval)
         paced = PacedSession(store, cfg, wall=wall)
         api = None
         try:
@@ -224,6 +241,9 @@ def run_once(store, cfg, api_factory=None, wall=time.time):
                     job = db.execute("SELECT * FROM jobs WHERE batch=? AND status='pending' AND retry_at<=? ORDER BY id LIMIT 1", (batch['id'], wall())).fetchone()
                 if not job:
                     finish_batch(store, batch, cfg, wall())
+                    interval = run_interval(store, cfg)
+                    store.set('next_run_at', now + interval)
+                    store.set('scheduled_interval_seconds', interval)
                     if store.get('state') == 'running':
                         store.set('state', 'waiting_retry')
                     break
@@ -256,9 +276,9 @@ def run_once(store, cfg, api_factory=None, wall=time.time):
                         store.fail(job, status, 'Token recusado. Confira a chave e execute --resume após corrigir o acesso.')
                         return 'auth_required'
                     terminal = status == 403 or job['attempts'] + 1 >= cfg['max_job_attempts']
-                    store.fail(job, status, f'Garmin HTTP {status}. '+('Consulta indisponível; registrada sem substituir dados locais válidos.' if terminal else 'Consulta será tentada na próxima execução.'), terminal=terminal, retry_at=wall()+cfg['run_interval_seconds'])
+                    store.fail(job, status, f'Garmin HTTP {status}. '+('Consulta indisponível; registrada sem substituir dados locais válidos.' if terminal else 'Consulta será tentada na próxima execução.'), terminal=terminal, retry_at=wall()+interval)
                 except (requests.RequestException, ValueError):
-                    store.fail(job, 0, 'Falha de conexão ou resposta inválida; coleta interrompida para evitar novas tentativas em sequência.', retry_at=wall()+cfg['run_interval_seconds'])
+                    store.fail(job, 0, 'Falha de conexão ou resposta inválida; coleta interrompida para evitar novas tentativas em sequência.', retry_at=wall()+interval)
                     store.set('state', 'waiting_retry')
                     return 'waiting_retry'
         except BudgetReached:

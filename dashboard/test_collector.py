@@ -104,4 +104,25 @@ class CollectorTests(unittest.TestCase):
         self.assertEqual(retry_after('Thu, 01 Jan 1970 00:02:00 GMT',0),120)
         self.assertEqual(retry_after('invalid',0),0)
 
+    def test_phase_cadence_and_wait_guard(self):
+        class API:
+            def __getattr__(self, name):
+                if name == 'close': return lambda: None
+                def stop(**kw): raise BudgetReached()
+                return stop
+        for mode, interval in [('history',1800),('incremental',7200)]:
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as root:
+                store=Store(root);store.set('mode',mode)
+                self.assertEqual(run_once(store,self.cfg,api_factory=API,wall=lambda:10000),'budget_reached')
+                self.assertEqual(store.get('next_run_at'),10000+interval)
+                self.assertEqual(run_once(store,self.cfg,api_factory=lambda:self.fail('Early request'),wall=lambda:10001),'waiting')
+
+    def test_cadence_migration_keeps_cooldown(self):
+        self.store.set('next_run_at',13600)
+        self.assertEqual(run_once(self.store,self.cfg,api_factory=lambda:self.fail('Early request'),wall=lambda:11000),'waiting')
+        self.assertEqual(self.store.get('next_run_at'),11800)
+        self.store.set('cooldown_until',20000)
+        self.assertEqual(run_once(self.store,self.cfg,api_factory=lambda:self.fail('Cooldown ignored'),wall=lambda:15000),'cooldown')
+        self.assertEqual(self.store.get('cooldown_until'),20000)
+
 if __name__=='__main__': unittest.main()
