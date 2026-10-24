@@ -1,0 +1,100 @@
+[
+  {
+    "id": "activities",
+    "label": "Atividades",
+    "group": "Treinos",
+    "path": "/activitylist-service/activities/search/activities",
+    "scope": "activities"
+  },
+  {
+    "id": "activity",
+    "label": "Detalhes da atividade",
+    "group": "Treinos",
+    "path": "/activity-service/activity/{activityId}",
+    "scope": "activity"
+  },
+  {
+    "id": "workouts",
+    "label": "Treinos associados",
+    "group": "Treinos",
+    "path": "/activity-service/activity/{activityId}/workouts",
+    "scope": "activity"
+  },
+  {
+    "id": "download",
+    "label": "Arquivo original da atividade",
+    "group": "Treinos",
+    "path": "/download-service/files/activity/{activityId}",
+    "scope": "download"
+  },
+  {
+    "id": "zones",
+    "label": "Zonas de frequência cardíaca",
+    "group": "Treinos",
+    "path": "/biometric-service/heartRateZones/v2",
+    "scope": "static"
+  },
+  {
+    "id": "sleep",
+    "label": "Sono do dia",
+    "group": "Recuperação",
+    "path": "/sleep-service/sleep/dailySleep",
+    "scope": "day"
+  },
+  {
+    "id": "sleep_range",
+    "label": "Histórico de sono",
+    "group": "Recuperação",
+    "path": "/sleep-service/sleep/dailySleepSummariesByDate",
+    "scope": "range"
+  },
+  {
+    "id": "body_battery",
+    "label": "Body Battery",
+    "group": "Recuperação",
+    "path": "/wellness-service/wellness/bodyBattery/reports/daily",
+    "scope": "range"
+  },
+  {
+    "id": "stress",
+    "label": "Estresse",
+    "group": "Recuperação",
+    "path": "/usersummary-service/stats/stress/daily/{startDate}/{endDate}",
+    "scope": "range"
+  },
+  {
+    "id": "heart_rate",
+    "label": "Frequência cardíaca do dia",
+    "group": "Saúde",
+    "path": "/wellness-service/wellness/dailyHeartRate",
+    "scope": "day"
+  },
+  {
+    "id": "steps",
+    "label": "Passos e distância diária",
+    "group": "Saúde",
+    "path": "/usersummary-service/stats/steps/daily/{startDate}/{endDate}",
+    "scope": "range"
+  },
+  {
+    "id": "daily",
+    "label": "Resumo completo do dia",
+    "group": "Saúde",
+    "path": "/usersummary-service/usersummary/daily",
+    "scope": "day"
+  },
+  {
+    "id": "daily_range",
+    "label": "Histórico de resumos diários",
+    "group": "Saúde",
+    "path": "/usersummary-service/v2/dailysummaries",
+    "scope": "range"
+  },
+  {
+    "id": "profile",
+    "label": "Perfil e configurações",
+    "group": "Perfil",
+    "path": "/userprofile-service/userprofile/settings",
+    "scope": "static"
+  }
+]

@@ -1,0 +1,1 @@
+{"name":"dados-felipe-garmin","private":true,"type":"module","version":"2.0.0","scripts":{"build":"node scripts/build.mjs","test:cloud":"node --test tests/cloud.test.mjs"},"dependencies":{"@vercel/blob":"2.8.2"},"engines":{"node":"24.x"}}

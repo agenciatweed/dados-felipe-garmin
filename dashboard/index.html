@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Seu diário de treinos, evolução e saúde, conectado à Garmin Personal API."><title>Tweed · Meu treinamento</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/tweed.css"><script src="/app.js" defer></script></head>
+<body>
+<div class="shell">
+ <aside class="sidebar">
+  <a class="brand" href="#treinos" aria-label="Tweed, meu treinamento"><img src="/assets/tweed.svg" alt="Tweed"><span class="brand-sub">MEU TREINAMENTO</span></a>
+  <nav aria-label="Seções do painel">
+   <button class="nav active" data-view="treinos"><svg viewBox="0 0 24 24"><path d="M3 18 8 11l4 3 8-10M15 4h5v5"/></svg>Treinos e evolução</button>
+   <button class="nav" data-view="recuperacao"><svg viewBox="0 0 24 24"><path d="M20 14A8 8 0 0 1 10 4a8 8 0 1 0 10 10Z"/></svg>Recuperação</button>
+   <button class="nav" data-view="saude"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg>Saúde e rotina</button>
+   <button class="nav" data-view="explorar"><svg viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5M3 17l9 5 9-5"/></svg>Explorar todos os dados</button>
+  </nav>
+  <div class="sidebar-note"><span class="connection-dot"></span> Garmin Personal API<p>Dados locais. Coleta gradual.</p><span id="coverage">14 recursos ativos</span></div>
+ </aside>
+ <main>
+  <header><div><h1 id="page-title">Treinos e evolução</h1><p id="page-description">Observe a consistência. Entenda seu progresso.</p></div><div class="header-action"><span id="sync-state" role="status" aria-live="polite">Lendo arquivos locais…</span><button id="reload" class="button secondary">Atualizar tela</button></div></header>
+  <section class="sync-panel" aria-label="Progresso da coleta"><div class="sync-summary"><div><h2>Seu histórico, no seu ritmo.</h2><p id="collection-message" role="status">Preparando o coletor local…</p></div><span class="status" id="collection-state">Arquivo local</span></div><details><summary>Ver progresso da importação</summary><div id="collection-details"></div><button type="button" class="button secondary" id="show-imported" hidden>Ver período já importado</button></details></section>
+  <form class="filters" id="filters">
+   <label>Período<select id="preset"><option value="30">Últimos 30 dias</option><option value="7">Últimos 7 dias</option><option value="90">Últimos 90 dias</option><option value="180">Últimos 180 dias</option><option value="365">Últimos 365 dias</option><option value="custom">Personalizado</option></select></label>
+   <label>De<input type="date" id="start" required></label><label>Até<input type="date" id="end" required></label>
+   <label>Modalidade<select id="sport"><option value="">Todas as modalidades</option></select></label>
+   <button class="button" type="submit">Aplicar período</button>
+  </form>
+  <div id="global-error" class="notice error" hidden role="alert"></div>
+  <section id="view-treinos" class="view">
+   <div class="section-title"><h2>Seu ritmo de treinamento</h2><span id="range-label"></span></div>
+   <div id="metrics" class="metrics" aria-live="polite"></div>
+   <div class="analysis-grid"><section class="panel chart-panel"><div class="panel-heading"><div><h2>Volume de treino</h2><p>Distância por semana · km</p></div><span class="legend"><i></i>Período selecionado</span></div><div id="volume-chart" class="chart"></div></section><section class="panel comparison"><h2>Em perspectiva</h2><p>Comparação com o período anterior de mesma duração.</p><div id="comparison"></div><p class="footnote">O ritmo considera apenas corridas. Modalidades diferentes não são comparadas em ritmo.</p></section></div>
+   <section class="panel table-panel"><div class="panel-heading"><div><h2>Diário de atividades <span class="count" id="activity-count">—</span></h2><p>Selecione um treino para conhecer os detalhes.</p></div><label class="search-label"><span class="sr-only">Buscar atividades por nome</span><input type="search" id="activity-search" placeholder="Buscar atividade…"></label></div><div class="table-scroll"><table><thead><tr><th>Atividade</th><th>Data</th><th>Distância</th><th>Duração</th><th>Ritmo / velocidade</th><th>FC média</th><th>Elevação</th></tr></thead><tbody id="activities"></tbody></table></div><div id="activity-empty" class="empty" hidden></div></section>
+  </section>
+  <section id="view-recuperacao" class="view" hidden><div class="section-title"><h2>Recuperar também é treinar</h2></div><div class="day-filter"><label>Dia em detalhe<input type="date" class="day-input"></label><p>As consultas diárias usam esta data. Históricos usam o período do topo.</p></div><div id="recovery-content" class="resource-grid"></div></section>
+  <section id="view-saude" class="view" hidden><div class="section-title"><h2>Além dos quilômetros</h2></div><div class="day-filter"><label>Dia em detalhe<input type="date" class="day-input"></label><p>Dados disponíveis nos arquivos já coletados.</p></div><div id="health-content" class="resource-grid"></div></section>
+  <section id="view-explorar" class="view" hidden><div class="section-title"><h2>Todos os recursos da sua conta</h2><span id="catalog-count"></span></div><p class="intro">Consulte qualquer recurso do catálogo oficial. Explore os campos dos recursos ativos, a partir da cópia local.</p><div class="explorer-layout"><div><label class="field-label">Buscar recurso<input id="resource-search" type="search" placeholder="Sono, peso, perfil…"></label><div id="resource-list" class="resource-list"></div></div><section class="panel explorer-detail"><div class="explorer-controls"><label>Dia em detalhe<input id="explorer-day" type="date" class="day-input"></label><label>Atividade<select id="explorer-activity"><option value="">Selecione uma atividade</option></select></label><button id="query-resource" class="button">Consultar recurso</button></div><div id="explorer-output"><div class="empty">Escolha um recurso ao lado para explorar seus dados.</div></div></section></div></section>
+  <footer><span>Fonte: arquivos locais · Garmin Personal API</span><span>Atualização gradual · sem consultas à Garmin pelo painel</span></footer>
+ </main>
+</div>
+<dialog id="detail"><div class="dialog-top"><h2 id="detail-title">Detalhes da atividade</h2><button id="close-detail" class="button secondary">Fechar</button></div><div id="detail-body"></div></dialog>
+</body></html>

@@ -1,0 +1,11 @@
+{
+  "history_start": "2025-10-01",
+  "request_interval_seconds": 8,
+  "jitter_seconds": 2,
+  "max_requests_per_run": 300,
+  "max_run_minutes": 45,
+  "run_interval_seconds": 3600,
+  "retry_cooldown_seconds": 1800,
+  "max_job_attempts": 3,
+  "download_originals": true
+}

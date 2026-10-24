@@ -1,0 +1,14 @@
+api.md
+tokens/
+dados_locais/
+raw/
+logs/
+.venv/
+.env*
+public/
+node_modules/
+__pycache__/
+*.sqlite3*
+*.zip
+.impeccable/
+.vercel/
