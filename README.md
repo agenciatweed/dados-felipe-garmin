@@ -26,7 +26,7 @@ Abra http://127.0.0.1:8791. O painel não acessa a Garmin. Para coletar, crie `a
 - Limite inicial de 300 chamadas ou 25 minutos por execução. Um mês grande pode continuar na próxima execução, sem perder o progresso.
 - HTTP 429 e falhas de servidor interrompem a coleta e respeitam `Retry-After`, quando informado, mais o intervalo de segurança configurado. Essas configurações são precauções locais, não uma quota oficial garantida pela Garmin.
 - Checkpoints em SQLite, bloqueio de execuções concorrentes e arquivos JSON/ZIP em `dados_locais`.
-- Concluído o histórico, a cada 2 horas atualiza as datas tocadas pelas últimas 24 horas, com sobreposição de dias porque a API usa datas de calendário. Recupera intervalos pendentes se o computador ficar sem conexão ou execução.
+- Concluído o histórico, a cada 12 horas atualiza as datas tocadas pelas últimas 24 horas, com sobreposição de dias porque a API usa datas de calendário. Recupera intervalos pendentes se o computador ficar sem conexão ou execução.
 - Erros individuais não são apresentados como dias sem dados. Após três falhas não transitórias, a consulta fica registrada como indisponível e o restante pode continuar.
 
 Configuração: `dashboard/sync-config.json`. Estado: `collector.py --status`. Pausar: `collector.py --pause`. Retomar: `collector.py --resume` (preserva pausas impostas pelo limite de API).
@@ -43,7 +43,7 @@ Vercel usa `api/cloud.mjs` para consultar arquivos mensais compactados em Blob p
 
 `run_pipeline.py` executa coleta, sincronização privada e publicação de código. `publish_public.py` usa uma lista explícita de arquivos, verifica credenciais acidentais e nunca adiciona dados de saúde. Sem alterações de código, não cria commits vazios. Os dados mudam no armazenamento privado, sem exigir um novo deploy a cada coleta.
 
-O agendamento a cada 30 minutos (com bloqueio de 2 horas na fase incremental) é feito no Codex no computador do usuário. Requer o aplicativo aberto e acesso à internet; o serviço não coleta dados pela Vercel nem executa pulls ao abrir o painel.
+O agendamento atual a cada 12 horas, após concluir a importação histórica é feito no Codex no computador do usuário. Requer o aplicativo aberto e acesso à internet; o serviço não coleta dados pela Vercel nem executa pulls ao abrir o painel.
 
 ## Explorar os gráficos
 

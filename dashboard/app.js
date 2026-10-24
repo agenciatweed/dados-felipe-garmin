@@ -204,7 +204,7 @@ async function refreshSync(){
   $('#collection-message').textContent=(names[info.state]||info.state)+(batch?' · '+dateBR(batch.start)+' a '+dateBR(batch.end):'')+(total?' · '+(progress.done||0)+' de '+total+' consultas concluídas':'')+'.';
   $('#collection-progress').max=Math.max(total,1);$('#collection-progress').value=progress.done||0;
   $('#collection-count').textContent=total?`${progress.done||0} / ${total} consultas do lote`:'Lote ainda não iniciado';
-  $('#collection-cadence').textContent=info.mode==='incremental'?'Atualização a cada 2 horas · janela de 24 horas':'Histórico a cada 30 minutos';
+  $('#collection-cadence').textContent=info.mode==='incremental'?'Atualização a cada 12 horas · janela de 24 horas':'Histórico a cada 30 minutos';
   const when=t=>t?new Date(t*1000).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'}):'Aguardando primeira execução';
   $('#collection-next').textContent='Próxima coleta: '+when(Math.max(info.next_run_at||0,info.cooldown_until||0));
   $('#collection-details').innerHTML='<p>Modo: '+(info.mode==='incremental'?'atualização das últimas 24 horas, com recuperação de intervalos perdidos':'importação mensal, com retomada automática')+'</p><p>Meses concluídos: '+esc(info.months_completed)+' · Atividades salvas: '+esc(info.activities?.n||0)+'</p><p>Próxima execução elegível: '+esc(when(Math.max(info.next_run_at||0,info.cooldown_until||0)))+'</p>'+(info.errors?.length?'<p class="error">Consultas com pendências: '+info.errors.map(e=>esc(e.resource)+' ('+esc(e.http_status)+')').join(', ')+'</p>':'');
