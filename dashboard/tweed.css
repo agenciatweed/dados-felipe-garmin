@@ -6,3 +6,5 @@ body{font-family:Inter,sans-serif}.brand{display:flex;flex-direction:column;alig
 @media(max-width:760px){.brand{flex-direction:row;align-items:center;gap:18px;padding-bottom:18px}.brand img{width:100px;height:34px}.brand-sub{font-size:11px;margin:0;letter-spacing:.04em}.sync-panel{padding:17px}.sync-summary{flex-direction:column;gap:12px}.sidebar{padding-top:16px}.resource-grid{gap:16px}}
 
 .metrics>.empty{grid-column:1/-1;max-width:75ch;text-align:left}
+
+@media(max-width:760px){.filters label:nth-child(4){flex-basis:100%;width:100%}.filters .button{flex-basis:100%;width:100%}}

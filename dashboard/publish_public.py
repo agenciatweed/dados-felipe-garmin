@@ -45,11 +45,12 @@ def prepare():
 
 def publish():
     prepare()
-    if git('diff','--cached','--quiet',check=False).returncode==0:
-        return 'Código público já atualizado.'
-    git('config','user.name','Agência Tweed')
-    git('config','user.email','297122328+agenciatweed@users.noreply.github.com')
-    git('commit','-m','Atualiza aplicação Garmin, identidade Tweed e coleta gradual')
+    changed=git('diff','--cached','--quiet',check=False).returncode!=0
+    if changed:
+        git('config','user.name','Agência Tweed')
+        git('config','user.email','297122328+agenciatweed@users.noreply.github.com')
+        git('commit','-m','Atualiza aplicação Garmin, identidade Tweed e coleta gradual')
+    # Retry an earlier interrupted push even when this run has no new changes.
     git('push','origin','HEAD:main')
     return 'Código atualizado no Git público; nenhum dado pessoal incluído.'
 
