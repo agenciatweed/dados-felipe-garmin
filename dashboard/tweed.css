@@ -56,3 +56,156 @@ td{padding-top:18px;padding-bottom:18px}
  .metric-value{font-size:29px}.metrics{padding:0}.metric{padding:20px 16px}
  .metric-note{min-height:32px}.table-panel .panel-heading{gap:18px}
 }
+.header-action .collection-link.needs-attention span{display:inline}
+#collection-panel:focus-visible{outline:2px solid var(--focus);outline-offset:4px}
+.chart svg[tabindex]{cursor:crosshair;border-radius:4px}
+.chart svg[tabindex]:focus-visible{outline:2px solid var(--focus);outline-offset:5px}
+.chart-guide{stroke:#b4b9c8;stroke-width:1;stroke-dasharray:3 5;opacity:.55;pointer-events:none}
+.chart .bar{opacity:.62;transition:opacity 140ms ease,fill 140ms ease}
+.chart .bar.is-active{opacity:1;fill:#08ffb1}
+.chart .pace-point{transition:r 140ms ease,fill 140ms ease}
+.chart .pace-point.is-active{fill:#08ffb1;stroke:#fff}
+.chart-inspector{margin-top:16px;min-height:92px;border-top:1px solid var(--line);padding-top:14px}
+.chart-inspector[hidden]{display:none}
+.chart-readout-main,.chart-readout-detail{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.chart-point-title{font-size:11px;color:var(--muted);max-width:65%;line-height:1.5;overflow-wrap:anywhere}
+.chart-readout-main strong{font-size:24px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;letter-spacing:-.025em}
+.chart-readout-detail{margin-top:7px;font-size:11px;color:var(--muted);align-items:center}
+.chart-key-hint{color:var(--blue);white-space:nowrap}
+.chart-detail-button{border:0;border-bottom:1px solid var(--blue);background:transparent;padding:0 0 2px;color:var(--blue);font-size:11px;min-height:32px;white-space:nowrap}
+.chart-detail-button:hover{color:var(--ink);border-color:var(--ink)}
+@media(max-width:760px){.chart-inspector{min-height:90px;margin-top:8px}.chart-readout-main strong{font-size:23px}.chart-detail-button{min-height:44px}.chart-key-hint{display:none}}
+@media(prefers-reduced-motion:reduce){.chart .bar,.chart .pace-point{transition:none}}
+
+/* Local Impeccable pass: prioritize the training worksheet. */
+.sync-panel{display:grid;grid-template-columns:minmax(210px,1fr) minmax(260px,1.4fr);column-gap:32px;row-gap:10px;padding:17px 22px}
+.sync-summary{align-items:center;justify-content:flex-start;gap:14px}
+.sync-panel h2{font-size:13px;white-space:nowrap}
+.sync-panel .status{font-size:10px}
+.sync-progress{margin:0;gap:12px}
+.sync-meta{grid-column:1/-1;margin:0}
+.sync-panel details{grid-column:1/-1;margin:0;padding-top:9px}
+.sync-panel details p{margin:10px 0 0}
+.sync-panel summary{color:#c1d0ca;font-size:11px}
+.sync-panel details[open]{padding-bottom:5px}
+.chart text.bar-value{fill:#e2fff4;font-size:12px;font-weight:600}
+.compare-row{padding:18px 0;border-bottom:1px solid var(--line)}
+.compare-row:last-child{border-bottom:0;padding-bottom:0}
+.compare-row:first-child{padding-top:0}
+.unavailable .compare-label{margin-bottom:7px}
+.unavailable .compare-label strong{font-size:20px;font-weight:600}
+.compare-caption{font-size:11px}
+.comparison .footnote{padding-top:17px;border-top:1px solid var(--line);line-height:1.65}
+.table-hint{display:none;margin:0;padding:0 24px 14px;color:var(--muted);font-size:11px}
+.table-panel.has-overflow .table-hint{display:block}
+.sync-panel #collection-live-state{font-size:11px;line-height:1.5;margin:4px 0 0;color:#c1d0ca}
+.table-scroll{overscroll-behavior-x:contain}
+.table-panel table{min-width:850px}
+.table-panel th:first-child,.table-panel td:first-child{min-width:180px;width:22%;position:sticky;left:0;z-index:1;background:var(--white);border-right:1px solid var(--line)}
+.table-panel th:first-child{background:#191c27;z-index:2}
+.table-panel tbody tr:hover td:first-child{background:#1b2430}
+.activity-link{min-height:32px}
+.resource-card{padding:24px;border-top:1px solid #4b5667}
+.resource-top{padding-bottom:18px;border-bottom:1px solid var(--line)}
+.resource-card h3{font-size:17px;letter-spacing:-.02em}
+.resource-card .card-body>.notice{margin-top:20px;margin-bottom:0;line-height:1.7;border:0;padding:0;background:transparent}
+.resource-card .status{font-size:10px}
+.status.pending-status{background:#252c38;color:#d0d7e4}
+.resource-card>.button{margin-top:20px}
+.resource-item{border-radius:0;border-bottom:1px solid var(--row-line,#292e3c);padding:15px 12px}
+.explorer-detail{padding:26px}
+.data-tree .leaf{padding-top:10px;padding-bottom:10px}
+@media(max-width:1150px){.sync-panel{grid-template-columns:1fr}.sync-meta{grid-column:auto}.sync-summary{justify-content:space-between}}
+@media(max-width:760px){
+ .sync-panel{padding:16px;gap:10px}.sync-summary{flex-direction:row;align-items:center;gap:10px}
+ .sync-panel h2{font-size:12px}.sync-panel .status{font-size:9px}
+ .sync-meta{font-size:10px}.sync-progress span{font-size:10px}
+ .table-hint{padding-left:18px;padding-right:18px}
+ .table-panel th:first-child,.table-panel td:first-child{min-width:150px;width:150px;max-width:150px}
+ .table-panel td{padding-top:14px;padding-bottom:14px}
+ .activity-link{max-width:125px;font-size:12px;line-height:1.55}
+ .resource-card{padding:20px}.resource-card h3{font-size:16px}
+ .resource-top{gap:16px}.explorer-detail{padding:20px}
+}
+
+/* Visual analysis: data first, operational details second. */
+header{border:0;padding-bottom:0;margin-bottom:26px;align-items:center}
+main:has(#view-treinos:not([hidden])) #page-description{display:none}
+.header-action{flex-direction:row;align-items:center;gap:10px}
+.header-action #sync-state{display:none}
+.collection-link{display:flex;align-items:center;gap:8px;font-size:11px}
+.collection-link span{color:var(--blue);font-weight:400}
+.period-controls>summary{display:none}
+.period-controls .filters{margin-bottom:18px;padding-bottom:18px}
+.section-title{margin-top:20px;margin-bottom:15px}
+.section-title h2{font-size:14px;color:var(--muted);font-weight:500}
+.metrics{border:0;background:transparent;border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0;padding:22px 0;margin-bottom:26px}
+.metric:first-child{padding-left:0}.metric:last-child{padding-right:0}
+.metric-value{font-size:38px;margin-top:8px}
+.metric-note{font-size:11px}.no-comparison .metric:nth-child(-n+3) .metric-note{display:none}
+.analysis-grid{grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:24px;margin-bottom:16px}
+.analysis-grid .panel{background:transparent;border:0;border-radius:0;padding:20px 0 0}
+.analysis-grid .pace-panel{padding-left:24px;border-left:1px solid var(--line)}
+.analysis-grid .panel-heading{align-items:center;gap:12px;margin-bottom:22px}
+.analysis-grid h2{font-size:19px;letter-spacing:-.025em}
+.analysis-grid .chart,.analysis-grid .chart svg{height:300px;min-height:300px}
+.analysis-grid .chart{padding:0}
+.chart-switch{display:flex;padding:3px;background:var(--white);border:1px solid var(--line);border-radius:6px;gap:3px}
+.chart-switch button{background:transparent;color:var(--muted);border:0;border-radius:3px;font-size:11px;padding:7px 10px;min-height:32px}
+.chart-switch button.selected{background:var(--blue-light);color:var(--blue)}
+.chart-switch button:hover{color:var(--ink)}
+.period-comparison{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:28px;padding:0}
+.period-comparison>summary{font-size:12px;color:var(--muted);padding:14px 0;cursor:pointer;min-height:44px}
+.period-comparison .comparison{border:0;background:transparent;padding:16px 0;display:block}
+.period-comparison .comparison>h2,.period-comparison .comparison>p:first-of-type{display:none}
+.period-comparison #comparison{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.period-comparison .compare-row{border:0;padding:0}
+.period-comparison .footnote{font-size:11px}
+.table-panel{border-radius:0;border-width:1px 0 0;background:transparent}
+.table-panel .panel-heading{padding-left:0;padding-right:0}
+.table-panel .panel-heading p{display:none}
+.table-panel th:first-child,.table-panel td:first-child{background:var(--paper)}
+.table-panel th{background:var(--paper);font-size:11px}
+.sync-panel{margin-top:36px;margin-bottom:0;scroll-margin-top:24px}
+.sync-panel .status,.sync-meta,.sync-progress span{font-size:11px}
+.sync-panel #reload{justify-self:start;min-height:44px}
+.sync-panel summary{min-height:44px;line-height:24px;padding:10px 0}
+.activity-link{min-height:44px}
+@media(min-width:1500px){.analysis-grid .chart,.analysis-grid .chart svg{height:330px}}
+@media(max-width:1150px){
+ .analysis-grid{grid-template-columns:minmax(0,1.4fr) minmax(250px,1fr);gap:20px}
+ .analysis-grid .panel-heading{align-items:flex-start;flex-direction:column}
+ .analysis-grid .pace-panel{padding-left:20px}
+ .metric-value{font-size:30px}
+ .header-action .collection-link span{display:none}
+}
+@media(max-width:760px){
+ nav{display:grid;grid-template-columns:1fr 1fr;gap:4px;overflow:visible}
+ .nav{padding:10px 8px;font-size:11px;min-height:44px}
+ header{margin-bottom:18px;gap:12px;align-items:flex-start}
+ h1{font-size:26px}.header-action{flex-direction:column;align-items:stretch;gap:6px}
+ .header-action .button{padding:6px 9px;min-height:36px}
+ .period-controls{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:18px}
+ .period-controls>summary{display:flex;flex-direction:column;gap:5px;font-size:12px;cursor:pointer;padding:14px 0;min-height:44px;color:var(--ink)}
+ .period-controls>summary::after{content:'Alterar filtros';color:var(--blue);font-size:11px}
+ .period-controls[open]>summary::after{content:'Recolher filtros'}
+ #filter-summary{font-size:11px;color:var(--muted)}
+ .period-controls .filters{padding:10px 0 18px;margin:0;border:0}
+ .section-title{margin-top:18px}.section-title h2{display:none}
+ .section-title #range-label{font-size:11px}
+ .metrics{padding:0;margin-bottom:20px;border:0}
+ .metric,.metric:first-child,.metric:last-child{padding:12px 14px 12px 0}
+ .metric:nth-child(even){padding-left:16px}
+ .metric-value{font-size:29px}.metric-note{min-height:0}
+ .metric:last-child .metric-note{display:none}
+ .analysis-grid{grid-template-columns:1fr;gap:24px;margin-bottom:22px}
+ .analysis-grid .panel,.analysis-grid .pace-panel{padding:0;border:0}
+ .analysis-grid .panel-heading{flex-direction:row;align-items:center;margin-bottom:14px}
+ .analysis-grid h2{font-size:17px}
+ .analysis-grid .chart,.analysis-grid .chart svg{height:250px;min-height:250px}
+ .chart-switch button{min-height:38px;font-size:11px;padding:6px 8px}
+ .table-panel .panel-heading{padding-left:0;padding-right:0}
+ .table-hint{padding-left:0;padding-right:0}
+ .period-comparison #comparison{grid-template-columns:1fr;gap:20px}
+ .sync-panel .status,.sync-meta,.sync-progress span{font-size:11px}
+}

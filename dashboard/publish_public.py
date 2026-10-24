@@ -44,6 +44,8 @@ def prepare():
     return selected
 
 def publish():
+    if (PROJECT/'.publication-hold').exists():
+        return 'Publicação de código suspensa para revisão local; coleta e dados privados continuam ativos.'
     prepare()
     changed=git('diff','--cached','--quiet',check=False).returncode!=0
     if changed:

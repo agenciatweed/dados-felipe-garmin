@@ -45,6 +45,10 @@ Vercel usa `api/cloud.mjs` para consultar arquivos mensais compactados em Blob p
 
 O agendamento a cada 30 minutos (com bloqueio de 2 horas na fase incremental) é feito no Codex no computador do usuário. Requer o aplicativo aberto e acesso à internet; o serviço não coleta dados pela Vercel nem executa pulls ao abrir o painel.
 
+## Explorar os gráficos
+
+O volume semanal alterna entre distância e tempo com transição suave. Passe o cursor, toque no gráfico ou use as setas, Home e End para selecionar um ponto. Os valores aparecem abaixo do gráfico; em ritmo por corrida, “Ver treino” abre os detalhes da atividade selecionada. A preferência do sistema por movimento reduzido desativa a transição. Essas interações usam somente os dados já salvos, sem consultar a Garmin.
+
 ## Identidade visual
 
 Design system [Agência Tweed](https://github.com/agenciatweed/brand-guidelines-tweed): azul-escuro `#0b0c13`, teal `#08ffb1`, branco e tipografia Inter. Assets oficiais são baixados de um commit fixo no build; origens em `dashboard/assets/ORIGINS.json`.
