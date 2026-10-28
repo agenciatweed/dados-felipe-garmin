@@ -83,6 +83,13 @@ class CollectorTests(unittest.TestCase):
         self.assertEqual(batch['start'],'2026-10-18')
         self.assertEqual(batch['end'],'2026-10-24')
 
+    def test_incremental_window_covers_48_hour_cadence(self):
+        self.store.set('mode','incremental')
+        self.store.set('covered_until','2026-10-24')
+        batch=plan(self.store,self.cfg,self.now)
+        self.assertEqual(batch['start'],'2026-10-22')
+        self.assertEqual(batch['end'],'2026-10-24')
+
     def test_history_transitions_only_after_finished(self):
         self.store.set('next_month','2026-10-01')
         batch=plan(self.store,self.cfg,self.now)
@@ -110,7 +117,7 @@ class CollectorTests(unittest.TestCase):
                 if name == 'close': return lambda: None
                 def stop(**kw): raise BudgetReached()
                 return stop
-        for mode, interval in [('history',1800),('incremental',43200)]:
+        for mode, interval in [('history',1800),('incremental',172800)]:
             with self.subTest(mode=mode), tempfile.TemporaryDirectory() as root:
                 store=Store(root);store.set('mode',mode)
                 self.assertEqual(run_once(store,self.cfg,api_factory=API,wall=lambda:10000),'budget_reached')

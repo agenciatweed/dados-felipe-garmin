@@ -5,8 +5,9 @@
   "max_requests_per_run": 300,
   "max_run_minutes": 25,
   "history_interval_seconds": 1800,
-  "incremental_interval_seconds": 43200,
+  "incremental_interval_seconds": 172800,
   "retry_cooldown_seconds": 1800,
   "max_job_attempts": 3,
-  "download_originals": true
+  "download_originals": true,
+  "incremental_window_hours": 48
 }

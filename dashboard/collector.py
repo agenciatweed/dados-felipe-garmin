@@ -86,8 +86,8 @@ def plan(store, cfg, now=None):
         batch_id = f'history:{start}:{end}'
     else:
         # The API accepts calendar dates. Refresh both days touched by the last
-        # 24h, and backfill from the last completed coverage after a PC outage.
-        rolling_start = str((now - timedelta(hours=24)).date())
+        # configured window, and backfill from the last completed coverage after an outage.
+        rolling_start = str((now - timedelta(hours=cfg.get('incremental_window_hours',24))).date())
         start = min(rolling_start, store.get('covered_until', rolling_start))
         end = today
         batch_id = f'incremental:{now.strftime("%Y-%m-%dT%H")}'
