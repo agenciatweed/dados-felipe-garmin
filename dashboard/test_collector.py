@@ -117,7 +117,7 @@ class CollectorTests(unittest.TestCase):
                 if name == 'close': return lambda: None
                 def stop(**kw): raise BudgetReached()
                 return stop
-        for mode, interval in [('history',1800),('incremental',172800)]:
+        for mode, interval in [('history',1800),('incremental',43200)]:
             with self.subTest(mode=mode), tempfile.TemporaryDirectory() as root:
                 store=Store(root);store.set('mode',mode)
                 self.assertEqual(run_once(store,self.cfg,api_factory=API,wall=lambda:10000),'budget_reached')

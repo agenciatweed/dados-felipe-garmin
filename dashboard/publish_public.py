@@ -7,7 +7,7 @@ PROJECT=Path(__file__).resolve().parent.parent
 REPO=PROJECT/'repositorio'
 FILES=['package.json','package-lock.json','vercel.json','README.md','iniciar-dashboard.ps1','abrir-dashboard.ps1','abrir-dashboard.cmd',
  'api/cloud.mjs','cloud/catalog.json','scripts/build.mjs','tests/cloud.test.mjs',
- 'dashboard/server.py','dashboard/catalog.py','dashboard/local_store.py','dashboard/collector.py','dashboard/sync_cloud.py','dashboard/run_pipeline.py','dashboard/publish_public.py','dashboard/test_collector.py','dashboard/sync-config.json','dashboard/requirements.txt','dashboard/index.html','dashboard/app.js','dashboard/style.css','dashboard/tweed.css','dashboard/assets/ORIGINS.json','dashboard/assets/tweed.svg']
+ 'instalar-inicializacao.ps1','dashboard/running_data.py','dashboard/running.js','dashboard/running.css','dashboard/test_running.py','dashboard/server.py','dashboard/catalog.py','dashboard/local_store.py','dashboard/collector.py','dashboard/sync_cloud.py','dashboard/run_pipeline.py','dashboard/publish_public.py','dashboard/test_collector.py','dashboard/sync-config.json','dashboard/requirements.txt','dashboard/index.html','dashboard/app.js','dashboard/style.css','dashboard/tweed.css','dashboard/assets/ORIGINS.json','dashboard/assets/tweed.svg']
 
 def git(*args,check=True):
     # Prevent unattended credential prompts: notify instead of hanging a collector.
@@ -30,6 +30,10 @@ def prepare():
     if cloud_file.exists():
         import json
         secrets.extend(str(v).encode() for k,v in json.loads(cloud_file.read_text()).items() if k in ('bypass','sync_secret'))
+    maps_file=PROJECT/'tokens'/'google-maps.json'
+    if maps_file.exists():
+        import json
+        secrets.append(str(json.loads(maps_file.read_text()).get('mapsKey','')).encode())
     selected=[]
     for name in FILES:
         source=PROJECT/name

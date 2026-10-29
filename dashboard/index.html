@@ -1,11 +1,12 @@
 <!doctype html>
 <html lang="pt-BR">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Seu diário de treinos, evolução e saúde, conectado à Garmin Personal API."><title>Tweed · Meu treinamento</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/tweed.css"><script src="/app.js" defer></script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Seu diário de treinos, evolução e saúde, conectado à Garmin Personal API."><title>Tweed · Meu treinamento</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/tweed.css"><script src="/app.js" defer></script><link rel="stylesheet" href="/running.css"><script src="/running.js" defer></script></head>
 <body>
 <div class="shell">
  <aside class="sidebar">
   <a class="brand" href="#treinos" aria-label="Tweed, meu treinamento"><img src="/assets/tweed.svg" alt="Tweed"><span class="brand-sub">MEU TREINAMENTO</span></a>
   <nav aria-label="Seções do painel">
+   <button class="nav" data-view="corridas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18 8 11l4 3 8-10M15 4h5v5"/></svg>Corridas e evolução</button>
    <button class="nav active" data-view="treinos"><svg viewBox="0 0 24 24"><path d="M3 18 8 11l4 3 8-10M15 4h5v5"/></svg>Treinos e evolução</button>
    <button class="nav" data-view="recuperacao"><svg viewBox="0 0 24 24"><path d="M20 14A8 8 0 0 1 10 4a8 8 0 1 0 10 10Z"/></svg>Recuperação</button>
    <button class="nav" data-view="saude"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg>Saúde e rotina</button>
@@ -23,6 +24,11 @@
    <button class="button" type="submit">Aplicar período</button>
   </form></details>
   <div id="global-error" class="notice error" hidden role="alert"></div>
+<section id="view-corridas" class="view" hidden><div class="running-toolbar"><p>Corridas ao ar livre · histórico completo</p><nav class="running-shortcuts" aria-label="Nesta seção"><a href="#running-runs-title">Corridas</a><a href="#running-evolution-title">Evolução</a></nav><button class="button secondary" id="running-refresh">Recarregar dados</button></div><p id="running-error" class="notice error" hidden role="alert"></p><div class="training-group" role="group" aria-label="Corridas e evolução">
+<section class="column runs-column" aria-labelledby="running-runs-title"><div class="section-heading"><h2 id="running-runs-title">Corridas</h2><span class="count" id="running-run-count">—</span></div><p class="section-description">As últimas voltas, ao ar livre.</p><p id="running-run-coverage" class="source-note"></p><div id="running-runs"><p class="empty">Carregando corridas…</p></div><button id="running-more-runs" class="button secondary full" hidden>Ver mais corridas</button></section>
+<section class="column evolution-column" aria-labelledby="running-evolution-title"><div class="section-heading"><h2 id="running-evolution-title">Evolução</h2><label class="sr-only" for="running-months">Período dos gráficos</label><select id="running-months"><option value="12">12 meses</option><option value="6">6 meses</option><option value="0">Todo histórico</option></select></div><p class="section-description">Consistência em perspectiva.</p><p id="running-chart-coverage" class="source-note">Meses sem coleta não equivalem a zero.</p><div id="running-charts"><p class="empty">Carregando evolução…</p></div></section>
+</div>
+</section>
   <section id="view-treinos" class="view">
    <div class="section-title"><h2>Visão do período</h2><span id="range-label"></span></div>
    <div id="metrics" class="metrics" aria-live="polite"></div>
@@ -38,4 +44,4 @@
  </main>
 </div>
 <dialog id="detail"><div class="dialog-top"><h2 id="detail-title">Detalhes da atividade</h2><button id="close-detail" class="button secondary">Fechar</button></div><div id="detail-body"></div></dialog>
-</body></html>
+<dialog id="running-dialog" aria-labelledby="running-detail-title"><div class="running-dialog-top"><button id="running-close" class="button secondary">Fechar corrida</button></div><h2 id="running-detail-title"></h2><p id="running-detail-date"></p><dl id="running-detail-metrics" class="running-detail-metrics"></dl><h3>Seu percurso</h3><p id="running-map-status" class="source-note" role="status"></p><div id="running-map" aria-label="Mapa do percurso da corrida" hidden></div><div id="running-route"></div><p class="source-note">Fonte: arquivos Garmin já coletados no computador.</p></dialog></body></html>

@@ -48,8 +48,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header('Content-Length', str(len(body)))
         self.send_header('Cache-Control', 'no-store')
         self.send_header('X-Content-Type-Options', 'nosniff')
-        self.send_header('Referrer-Policy', 'no-referrer')
-        self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'")
+        self.send_header('Referrer-Policy', 'strict-origin-when-cross-origin')
+        self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self' https://maps.googleapis.com https://maps.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://*.googleapis.com https://*.gstatic.com https://*.google.com https://*.googleusercontent.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://*.google.com; frame-src https://*.google.com; worker-src blob:; frame-ancestors 'none'")
         if filename:
             self.send_header('Content-Disposition', f'attachment; filename="{filename}"')
         self.end_headers()
@@ -65,6 +65,18 @@ class Handler(BaseHTTPRequestHandler):
         try:
             if parsed.path == '/api/catalog':
                 self.reply(dict(resources=list(CATALOG.values()), today=str(today()), api_version='1.0.0', endpoints=len(CATALOG), local_mode=True))
+            elif parsed.path == '/api/maps/config':
+                path=PROJECT/'tokens'/'google-maps.json'
+                config=json.loads(path.read_text(encoding='utf-8')) if path.exists() else {}
+                self.reply({'mapsKey':config.get('mapsKey','')})
+            elif parsed.path == '/api/running':
+                from running_data import running_data
+                self.reply(running_data())
+            elif parsed.path == '/api/running/route':
+                from running_data import running_route
+                aid=query.get('activity',[''])[0]
+                if not re.fullmatch(r'[1-9][0-9]{0,24}',aid):raise ValueError('Selecione uma corrida válida.')
+                self.reply(running_route(aid))
             elif parsed.path == '/api/sync/status':
                 self.reply(STORE.status())
             elif parsed.path.startswith('/api/resource/'):
@@ -85,9 +97,9 @@ class Handler(BaseHTTPRequestHandler):
                     return
                 mime = 'image/svg+xml' if name.endswith('.svg') else 'font/ttf'
                 self.reply((ROOT / 'assets' / name).read_bytes(), content_type=mime)
-            elif parsed.path in ('/', '/app.js', '/style.css', '/tweed.css'):
-                name = {'/': 'index.html', '/app.js': 'app.js', '/style.css': 'style.css', '/tweed.css':'tweed.css'}[parsed.path]
-                mime = {'index.html': 'text/html; charset=utf-8', 'app.js': 'text/javascript; charset=utf-8', 'style.css': 'text/css; charset=utf-8', 'tweed.css':'text/css; charset=utf-8'}[name]
+            elif parsed.path in ('/', '/app.js', '/style.css', '/tweed.css', '/running.js', '/running.css'):
+                name = {'/': 'index.html', '/app.js': 'app.js', '/style.css': 'style.css', '/tweed.css':'tweed.css', '/running.js':'running.js', '/running.css':'running.css'}[parsed.path]
+                mime = {'index.html': 'text/html; charset=utf-8', 'app.js': 'text/javascript; charset=utf-8', 'style.css': 'text/css; charset=utf-8', 'tweed.css':'text/css; charset=utf-8', 'running.js':'text/javascript; charset=utf-8', 'running.css':'text/css; charset=utf-8'}[name]
                 self.reply((ROOT / name).read_bytes(), content_type=mime)
             else:
                 self.reply({'error': 'Página não encontrada.'}, 404)
