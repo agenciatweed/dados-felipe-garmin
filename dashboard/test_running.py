@@ -6,7 +6,7 @@ class RunningTests(unittest.TestCase):
   return dict(activityId=id,activityName='Corrida',activityType={'typeKey':'running'},distance=5000,duration=1800,startTimeLocal='2026-01-10 07:00:00',**kw)
  def test_outdoor_and_pace(self):
   a=self.activity(1,averageSpeed=2.5);self.assertEqual(normalize(a)['pace'],400)
-  a['activityType']['typeKey']='treadmill_running';self.assertIsNone(normalize(a))
+  a['activityType']['typeKey']='treadmill_running';self.assertTrue(normalize(a)['indoor'])
   a['activityType']['typeKey']='running';a['activityName']='Corrida virtual';self.assertIsNone(normalize(a))
  def test_weighted_month_and_coverage(self):
   with tempfile.TemporaryDirectory() as tmp:

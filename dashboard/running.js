@@ -29,8 +29,8 @@ function animateCharts(root,previous){
 }
 function renderRuns(){
  const runs=data.runs;$('#running-run-count').textContent=runs.length;
- $('#running-run-coverage').textContent=runs.length?`Dados disponíveis: ${date(data.coverage.firstRun)} a ${date(data.coverage.lastRun)}. Somente corridas ao ar livre.`:'Histórico ainda não coletado.';
- $('#running-runs').innerHTML=runs.slice(0,shown).map(r=>`<button class="run" data-run="${escape(r.id)}"><span class="run-top"><span>${escape(date(r.date))}</span><span>${escape(r.date.slice(11,16))}</span></span><div class="run-name">${escape(r.name)}</div><div class="run-metrics"><div><strong>${num(r.km)}</strong><small>quilômetros</small></div><div><strong>${pace(r.pace)}</strong><small>min/km</small></div><div><strong>${num(r.hr,0)}</strong><small>bpm</small></div><span class="run-arrow">${arrow}</span></div></button>`).join('')||'<p class="empty">Nenhuma corrida ao ar livre disponível.</p>';
+ $('#running-run-coverage').textContent=runs.length?`Dados disponíveis: ${date(data.coverage.firstRun)} a ${date(data.coverage.lastRun)}. Corridas ao ar livre e em esteira.`:'Histórico ainda não coletado.';
+ $('#running-runs').innerHTML=runs.slice(0,shown).map(r=>`<button class="run" data-run="${escape(r.id)}"><span class="run-top"><span>${escape(date(r.date))}</span><span>${escape(r.date.slice(11,16))}</span></span><div class="run-name">${escape(r.name)} <span class="running-kind">${r.indoor?"Esteira":"Ao ar livre"}</span></div><div class="run-metrics"><div><strong>${num(r.km)}</strong><small>quilômetros</small></div><div><strong>${pace(r.pace)}</strong><small>min/km</small></div><div><strong>${num(r.hr,0)}</strong><small>bpm</small></div><span class="run-arrow">${arrow}</span></div></button>`).join('')||'<p class="empty">Nenhuma corrida disponível.</p>';
  $('#running-more-runs').hidden=runs.length<=shown;
  document.querySelectorAll('[data-run]').forEach(el=>el.addEventListener('click',()=>openRun(el.dataset.run)));
 }
@@ -497,6 +497,7 @@ async function openRun(id){
  $('#running-map').hidden=true;$('#running-route').hidden=false;
  $('#running-route').replaceChildren();$('#running-map-status').textContent='Lendo percurso GPS do arquivo local…';
  $('#running-dialog').showModal();
+ if(r.indoor){$('#running-map-status').textContent='Corrida em esteira: não há percurso GPS. Os dados deste treino entram na evolução mensal.';return;}
  try{
   const response=await fetch('/api/running/route?activity='+encodeURIComponent(id));if(!response.ok)throw Error();
   const {route}=await response.json();if(selectedRun!==id||!$('#running-dialog').open)return;

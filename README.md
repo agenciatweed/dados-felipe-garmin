@@ -70,6 +70,6 @@ Os testes usam dados sintéticos e não acessam sua conta Garmin.
 
 ## Corridas e evolução
 
-A seção `#corridas` adapta os cartões e gráficos mensais do Painel Infos Felipe. Mostra apenas corridas ao ar livre, com distância, pace e frequência cardíaca. A evolução reúne distância total, média por treino, pace ponderado pela distância e FC ponderada pela duração. O seletor oferece 6 meses, 12 meses e todo o histórico; meses incompletos e lacunas continuam explícitos. A seção Treinos mantém sua análise anterior.
+A seção `#corridas` adapta os cartões e gráficos mensais do Painel Infos Felipe. Mostra corridas ao ar livre e em esteira, com distância, pace e frequência cardíaca. A evolução reúne distância total, média por treino, pace ponderado pela distância e FC ponderada pela duração. O seletor oferece 6 meses, 12 meses e todo o histórico; meses incompletos e lacunas continuam explícitos. A seção Treinos mantém sua análise anterior.
 
 Os dados vêm dos arquivos locais atuais e do histórico legado, unidos por ID sem duplicação. Recarregar dados apenas relê o disco. Os FIT são lidos sob demanda ao abrir uma corrida; o percurso é sobreposto ao Google Maps ao abrir a corrida. A chave de navegador fica em tokens/google-maps.json, fora do Git; o mapa requer internet. Se o Google Maps falhar, o traçado local continua disponível. A dependência `fitdecode` está fixada em `dashboard/requirements.txt`.

@@ -96,7 +96,8 @@ class CollectorTests(unittest.TestCase):
         self.assertFalse(finish_batch(self.store,batch,self.cfg,0))
         with self.store.connect() as db:
             db.execute("UPDATE jobs SET status='done'")
-        self.assertTrue(finish_batch(self.store,batch,self.cfg,0))
+        with patch('collector.local_now',return_value=self.now):
+            self.assertTrue(finish_batch(self.store,batch,self.cfg,0))
         self.assertEqual(self.store.get('mode'),'incremental')
 
     def test_budget_keeps_job_pending(self):

@@ -11,3 +11,5 @@
 .running-shortcuts{display:none}@media(max-width:1000px){.running-toolbar{flex-wrap:wrap}.running-shortcuts{display:flex;gap:24px}.running-shortcuts a{font-size:13px;min-height:44px;display:flex;align-items:center}#running-runs-title,#running-evolution-title{scroll-margin-top:24px}}
 
 #running-map{height:360px;width:100%;border-radius:8px;background:var(--paper);margin:16px 0}#running-map[hidden]{display:none}#running-map button{min-width:0} @media(max-width:760px){#running-map{height:300px}}
+
+.running-kind{display:inline-block;font-size:11px;color:var(--muted);font-weight:400;margin-left:8px}

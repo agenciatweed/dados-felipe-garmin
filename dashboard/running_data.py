@@ -34,13 +34,13 @@ def route_fit(path):
 def normalize(a):
     kind=a.get('activityType',a.get('activityTypeDTO',{})).get('typeKey','').lower()
     name=a.get('activityName','Corrida')
-    if kind not in {'running','trail_running','track_running','street_running','ultra_run'}:return None
-    if any(word in name.casefold() for word in ('esteira','treadmill','virtual')):return None
+    if kind not in {'running','trail_running','track_running','street_running','ultra_run','treadmill_running'}:return None
+    if any(word in name.casefold() for word in ('virtual',)):return None
     distance=a.get('distance',0) or 0
     duration=a.get('duration',0) or 0
     if distance<=0 or duration<=0:return None
     speed=a.get('averageSpeed',0) or 0
-    return dict(id=str(a['activityId']),name=name,date=a.get('startTimeLocal',''),km=distance/1000,duration=duration,pace=1000/speed if speed>0 else duration/(distance/1000),hr=a.get('averageHR'),maxHr=a.get('maxHR'),cadence=a.get('averageRunningCadenceInStepsPerMinute'),elevation=a.get('elevationGain'),calories=a.get('calories'),route=[])
+    return dict(indoor=kind=='treadmill_running' or any(word in name.casefold() for word in ('esteira','treadmill')),id=str(a['activityId']),name=name,date=a.get('startTimeLocal',''),km=distance/1000,duration=duration,pace=1000/speed if speed>0 else duration/(distance/1000),hr=a.get('averageHR'),maxHr=a.get('maxHR'),cadence=a.get('averageRunningCadenceInStepsPerMinute'),elevation=a.get('elevationGain'),calories=a.get('calories'),route=[])
 
 def garmin_data(folder):
     found={};routes={};covered=set();warnings=[];fetched=[]
@@ -116,6 +116,7 @@ def running_route(aid):
     data=running_data()
     run=next((r for r in data['runs'] if r['id']==aid),None)
     if run is None:raise ValueError('Corrida não encontrada.')
+    if run.get('indoor'):return dict(route=[])
     points=run['route']
     fit=ROOT/'dados_locais/raw/download'/f'{aid}.zip'
     if not points and fit.exists():points=route_fit(fit)
