@@ -30,7 +30,7 @@ Abra http://127.0.0.1:8791. O painel não acessa a Garmin. Para coletar, crie `a
 - Limite inicial de 300 chamadas ou 25 minutos por execução. Um mês grande pode continuar na próxima execução, sem perder o progresso.
 - HTTP 429 e falhas de servidor interrompem a coleta e respeitam `Retry-After`, quando informado, mais o intervalo de segurança configurado. Essas configurações são precauções locais, não uma quota oficial garantida pela Garmin.
 - Checkpoints em SQLite, bloqueio de execuções concorrentes e arquivos JSON/ZIP em `dados_locais`.
-- Concluído o histórico, a cada 12 horas atualiza as datas tocadas pelas últimas 48 horas, com sobreposição de dias porque a API usa datas de calendário. Recupera intervalos pendentes se o computador ficar sem conexão ou execução.
+- Concluído o histórico, a cada 24 horas atualiza as datas tocadas pelas últimas 48 horas, com sobreposição de dias porque a API usa datas de calendário. Recupera intervalos pendentes se o computador ficar sem conexão ou execução.
 - Erros individuais não são apresentados como dias sem dados. Após três falhas não transitórias, a consulta fica registrada como indisponível e o restante pode continuar.
 
 Configuração: `dashboard/sync-config.json`. Estado: `collector.py --status`. Pausar: `collector.py --pause`. Retomar: `collector.py --resume` (preserva pausas impostas pelo limite de API).
@@ -45,7 +45,7 @@ O painel funciona em `http://127.0.0.1:8791`, com servidor Python local e sem bu
 
 `run_pipeline.py` executa coleta local e backup apenas do código no Git. `publish_public.py` usa uma lista explícita de arquivos, verifica credenciais acidentais e nunca adiciona dados de saúde. Sem alterações de código, não cria commits vazios. O bloqueio `.publication-hold` continua sendo respeitado.
 
-A tarefa do Codex roda a cada 12 horas. Requer o computador ligado, o Codex aberto e internet para a coleta; o navegador pode estar fechado. Abrir o painel não dispara consultas à Garmin. A janela de 48 horas e a recuperação de períodos pendentes estão preservadas.
+A tarefa do Windows roda diariamente às 13h30. Requer o computador ligado, o usuário conectado e internet para a coleta; o navegador pode estar fechado. Abrir o painel não dispara consultas à Garmin. A janela de 48 horas e a recuperação de períodos pendentes estão preservadas.
 
 O endereço local funciona neste computador. A versão antiga da Vercel deixa de receber atualizações; os dados e as credenciais que já existem lá não são apagados por esta migração. Dados pessoais não vão ao Git público.
 
@@ -73,3 +73,7 @@ Os testes usam dados sintéticos e não acessam sua conta Garmin.
 A seção `#corridas` adapta os cartões e gráficos mensais do Painel Infos Felipe. Mostra corridas ao ar livre e em esteira, com distância, pace e frequência cardíaca. A evolução reúne distância total, média por treino, pace ponderado pela distância e FC ponderada pela duração. O seletor oferece 6 meses, 12 meses e todo o histórico; meses incompletos e lacunas continuam explícitos. A seção Treinos mantém sua análise anterior.
 
 Os dados vêm dos arquivos locais atuais e do histórico legado, unidos por ID sem duplicação. Recarregar dados apenas relê o disco. Os FIT são lidos sob demanda ao abrir uma corrida; o percurso é sobreposto ao Google Maps ao abrir a corrida. A chave de navegador fica em tokens/google-maps.json, fora do Git; o mapa requer internet. Se o Google Maps falhar, o traçado local continua disponível. A dependência `fitdecode` está fixada em `dashboard/requirements.txt`.
+
+## Agendamento sem IA
+
+A tarefa Windows `Garmin - Coleta local diaria` executa `coleta-diaria.ps1` diariamente às 13h30, no usuário conectado, sem janela. Codex não precisa estar aberto. A automação Codex equivalente está pausada para evitar duplicidade e créditos recorrentes. Se o horário for perdido, o Windows tenta executar quando possível. O computador precisa estar ligado e o usuário conectado. A janela permanece 48h e períodos pendentes são recuperados. Estado em `dados_locais/pipeline-status.json`; falhas do pipeline também retornam código 1 ao Agendador.
