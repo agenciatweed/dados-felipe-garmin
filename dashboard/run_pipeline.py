@@ -4,6 +4,9 @@ import json
 from collector import run_once, config, ProcessLock, CollectorBusy
 from local_store import Store, DEFAULT_DATA, atomic_write, local_now
 
+def report(message):
+    print(f'[{local_now():%H:%M:%S}] {message}', flush=True)
+
 def main():
     store=Store()
     try:
@@ -12,9 +15,12 @@ def main():
             path=DEFAULT_DATA/'pipeline-status.json'
             atomic_write(path,json.dumps(status).encode())
             try:
-                status['collector']=run_once(store,config())
+                report('Garmin | Verificando elegibilidade e iniciando a coleta local. As consultas respeitam os intervalos da API.')
+                status['collector']=run_once(store,config(),progress=report)
+                report(f"Etapa de coleta encerrada: {status['collector']}.")
                 # The dashboard reads Store directly; no cloud upload or build.
                 from publish_public import publish
+                report('Verificando backup de código permitido no Git. Dados pessoais permanecem locais.')
                 status['git']=publish()
                 status['state']='completed'
             except CollectorBusy:
@@ -27,7 +33,7 @@ def main():
             finally:
                 status['finished_at']=local_now().isoformat()
                 atomic_write(path,json.dumps(status,ensure_ascii=False,indent=2).encode())
-            print(status['state'])
+            report(f"Ciclo encerrado: {status['state']}.")
     except CollectorBusy:
         print('Ciclo anterior ainda em execução. Nenhuma execução duplicada foi iniciada.')
 

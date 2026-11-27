@@ -190,7 +190,7 @@ def finish_batch(store, batch, cfg, now):
     store.set('state', 'waiting')
     return True
 
-def run_once(store, cfg, api_factory=None, wall=time.time):
+def run_once(store, cfg, api_factory=None, wall=time.time, progress=None):
     with ProcessLock(store.root / 'coletor.lock'):
         now = wall()
         if store.get('paused', False):
@@ -254,6 +254,10 @@ def run_once(store, cfg, api_factory=None, wall=time.time):
                     continue
                 params = json.loads(job['params'])
                 try:
+                    if progress:
+                        with store.connect() as db:
+                            counts = dict(db.execute('SELECT status, COUNT(*) FROM jobs WHERE batch=? GROUP BY status', (batch['id'],)).fetchall())
+                        progress(f"Coleta em andamento: {counts.get('done', 0)} consultas concluídas; {counts.get('pending', 0)} pendentes. Consultando Garmin...")
                     data = execute(api, resource, params)
                     if resource['id'] == 'activities' and not isinstance(data, list):
                         raise ValueError('Formato de atividades inesperado.')
